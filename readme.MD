@@ -14,10 +14,9 @@ grader@52.65.31.177 -p 2200
 ## Upgrade those packages from the previous list
 `sudo apt-get upgrade`
 
-1. Download the default key of the instance and use it to login to the system
-2. Before I could log on to the instance, I needed to change the permissions of the default private key
-that I had saved on my local machine.
-(See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966) `sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
+## Download the default key of the instance and use it to login to the system
+Note: Before I could log on to the instance, I needed to change the permissions of the default private key
+that I had saved on my local machine. (See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966) `sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
 
 ## Log-in on default port 22 using the default key
 `ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
@@ -103,51 +102,61 @@ sudo service apache2 restart
 ## Install postgresql
 sudo apt-get install postgresql
 
-# Check that no remote connections are allowed:
-* Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-connections-to-my-postgresql-db/36364/2
-* Either way we can see by default that the file does not allow any remote connections so no changes are necessary
+## Check that no remote connections are allowed:
+Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-connections-to-my-postgresql-db/36364/2
+(Either way we can see by default that the file does not allow any remote connections so no changes are necessary)
+`sudo nano /etc/postgresql/9.5/main/pg_hba.conf`
 
-sudo nano /etc/postgresql/9.5/main/pg_hba.conf
+## Switch user to posgres
+`sudo su - postgres`
+
+## Get into psql shell
+`psql`
+
+## Create a catalog database
+`CREATE DATABASE catalog;`
+
+## Add a user called catalog
+`CREATE USER catalog;`
+
+## Give that user a password
+`ALTER ROLE catalog WITH PASSWORD 'cataloghorsechair';`
+
+## Grant all privelages to that user
+`GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;`
+
+## Configure apache to hand off requests to the applcation handler. (This can be done in the file `/etc/apache2/sites-enabled/000-default.conf`.
+1. I followed the steps of kongling893 (https://github.com/kongling893/Linux-Server-Configuration-UDACITY)
+1. `sudo nano /etc/apache2/sites-available/FlaskApp.conf`
+2. Add the following code to the virtual host:
+`<VirtualHost *:80>
+	ServerName MyServerName
+	ServerAdmin MyEmail
+	WSGIScriptAlias / /var/www/FlaskApp/flaskapp.wsgi
+	<Directory /var/www/FlaskApp/FlaskApp/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /static /var/www/FlaskApp/FlaskApp/static
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	LogLevel warn
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>`
+* Note that I removed the <directory> for static as my app doesn't have any static CSS.
+3. Enable virtual host: `sudo a2ensite FlaskApp`
 
 
-# Switch user to posgres
-sudo su - postgres
-
-# Get into psql shell
-psql
-
-# Create a catalog database
-CREATE DATABASE catalog;
-
-# Add a user called catalog
-CREATE USER catalog;
-
-# Give that user a password
-ALTER ROLE catalog WITH PASSWORD 'cataloghorsechair';
-
-# Grant all privelages to that user
-GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
 
 
 
 
 
-# Configure apache to hand off requests to the applcation handler
 
-
-
-
-#  Further configuration
-
-
-
-
-
-You then need to configure Apache to handle requests using the WSGI module. You’ll do this by editing the /etc/apache2/sites-enabled/000-default.conf file. This file tells Apache how to respond to requests, where to find the files for a particular site and much more. You can read up on everything this file can do within the Apache documentation.
+This file tells Apache how to respond to requests, where to find the files for a particular site and much more. You can read up on everything this file can do within the Apache documentation.
 
 For now, add the following line at the end of the <VirtualHost *:80> block, right before the closing </VirtualHost> line: WSGIScriptAlias / /var/www/html/myapp.wsgi
 
-Finally, restart Apache with the sudo apache2ctl restart command.
+Finally, restart Apache with the 
 
 You might get a warning saying "Could not reliably determine the server's fully qualified domain name". If you do, don't worry about it. Check out this AskUbuntu thread for a discussion of the cause of this message.
 
