@@ -1,10 +1,18 @@
-# Final linux project, steps taken/commands executed
+# Linux Server Configuration Project
 
-# First I need to download the default key from the instance and use it to login to the system
+## I.P Address and port to acsess server via SSH
+grader@52.65.31.177 -p 2200
 
-# Before I could log on to the instance, I needed to change the permissions of the default private key
-# That I had saved on my local machine:
-# See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966
+## URL to hosted web application
+`http://ec2-52-65-31-177.ap-southeast-2.compute.amazonaws.com/`
+
+## Steps taken to complete this project/reference
+
+1. Download the default key of the instance and use it to login to the system
+2. Before I could log on to the instance, I needed to change the permissions of the default private key
+that I had saved on my local machine.
+⋅⋅* See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966
+
 sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem
 
 # Now I can log in with my own key
