@@ -107,7 +107,7 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 (Either way we can see by default that the file does not allow any remote connections so no changes are necessary)
 `sudo nano /etc/postgresql/9.5/main/pg_hba.conf`
 
-## Follow steps of kongling893 to set up catalog database, configure apache to handle requests to custom handler and to create the wsgi file (https://github.com/kongling893/Linux-Server-Configuration-UDACITY)
+## Follow kongling893 to set up catalog database, configure apache to handle requests to custom handler and to create the wsgi file (https://github.com/kongling893/Linux-Server-Configuration-UDACITY). Many custom steps had to be taken especially when configuring the "catalog app" (see below)
 
 ## Switch user to posgres
 `sudo su - postgres`
@@ -146,7 +146,7 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 * Note that I removed the <directory> for static as my app doesn't have any static CSS.
 3. Enable virtual host: `sudo a2ensite FlaskApp`
 
-## Install git, clone project, and make adjustments (Steps adapted from kongling893)
+## Configure "Catalog App": Install git, clone project, and make adjustments (Steps adapted from kongling893)
 1. Install Git using `sudo apt-get install git`
 2. Use `cd /var/www` to move to the /var/www directory 
 3. Create the application directory `sudo mkdir FlaskApp`
