@@ -107,6 +107,8 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 (Either way we can see by default that the file does not allow any remote connections so no changes are necessary)
 `sudo nano /etc/postgresql/9.5/main/pg_hba.conf`
 
+## Follow steps of kongling893 to set up catalog database, configure apache to handle requests to custom handler and to create the wsgi file (https://github.com/kongling893/Linux-Server-Configuration-UDACITY)
+
 ## Switch user to posgres
 `sudo su - postgres`
 
@@ -126,7 +128,6 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 `GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;`
 
 ## Configure apache to hand off requests to the applcation handler. (This can be done in the file `/etc/apache2/sites-enabled/000-default.conf`.
-1. I followed the steps of kongling893 (https://github.com/kongling893/Linux-Server-Configuration-UDACITY)
 1. `sudo nano /etc/apache2/sites-available/FlaskApp.conf`
 2. Add the following code to the virtual host:
 `<VirtualHost *:80>
@@ -145,24 +146,50 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 * Note that I removed the <directory> for static as my app doesn't have any static CSS.
 3. Enable virtual host: `sudo a2ensite FlaskApp`
 
+## Install git, clone project, and make adjustments (Steps adapted from kongling893)
+1. Install Git using `sudo apt-get install git`
+2. Use `cd /var/www` to move to the /var/www directory 
+3. Create the application directory `sudo mkdir FlaskApp`
+4. Move inside this directory using `cd FlaskApp`
+5. Clone the Catalog App to the virtual machine `git clone https://github.com/kongling893/Item_Catalog_UDACITY.git`
+6. Rename the project's name `sudo mv ./Item_Catalog_UDACITY ./FlaskApp`
+7. Move to the inner FlaskApp directory using `cd FlaskApp`
+8. Rename `website.py` to `__init__.py` using `sudo mv website.py __init__.py`
+9. Edit `database_setup.py`, `website.py` and change `engine = create_engine('sqlite:///storyAndWord.db')` to `engine = create_engine('postgresql://catalog:<password created in posgresql console>@localhost/catalog')`
+10. Install pip `sudo apt-get install python-pip3`
+11. Since I didn't create a requirements.txt file on my local machine, use PIGAR to automatically create one: (https://github.com/Damnever/pigar)
+12. Use pip to install dependencies `sudo -H pip3 install -r requirements.txt` (The -H makes sure that all of the packages get installed on the root directory and not the user ubuntu)
+12. At: https://console.developers.google.com/apis add new JavaScript path to the default domain name.
+13. Change path of CLIENT_SECRETS file to ABSOLUTE PATH both at top of __init.py__ folder and inside the gConnect() method.
+14. Add a sheBang line to the top of __init__.py
+
+## Create the .wsgi File
+`cd /var/www/FlaskApp`
+`sudo nano flaskapp.wsgi`
+
+## Add the following lines of code to the wsgi
+`
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/FlaskApp/")
+
+from FlaskApp import app as application
+application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
+`
+## Restart APACHE 
+`sudo service apache2 restart`
+
+
+# For debugging
+
+## Display outputs of apache2 error log file
+`cat /var/log/apache2/error.log`
+
+## Reload apache2 server
+`sudo service apache2 reload`
 
 # Notes from the class are copied below:
 # Additional notes taken from class
 ## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
