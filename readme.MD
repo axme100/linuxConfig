@@ -1,18 +1,18 @@
 # Linux Server Configuration Project
 
-## Update the available package list
-`sudo apt-get update`
-
-## Upgrade those packages from the previous list
-`sudo apt-get upgrade`
-
 ## I.P Address and port to acsess server via SSH
 grader@52.65.31.177 -p 2200
 
 ## URL to hosted web application
 `http://ec2-52-65-31-177.ap-southeast-2.compute.amazonaws.com/`
 
-## Steps taken to complete this project/reference
+# Steps taken to complete this project/reference
+
+## Update the available package list
+`sudo apt-get update`
+
+## Upgrade those packages from the previous list
+`sudo apt-get upgrade`
 
 1. Download the default key of the instance and use it to login to the system
 2. Before I could log on to the instance, I needed to change the permissions of the default private key
