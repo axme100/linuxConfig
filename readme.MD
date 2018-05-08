@@ -11,21 +11,15 @@ grader@52.65.31.177 -p 2200
 1. Download the default key of the instance and use it to login to the system
 2. Before I could log on to the instance, I needed to change the permissions of the default private key
 that I had saved on my local machine.
-⋅⋅* See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966
+(See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966) `sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
 
-sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem
+## Log-in on default port 22 using the default key `ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
 
-# Now I can log in with my own key
-ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/linuxProj
+## Use ssh key-gen to create a new public private key and upload it to the server. Once done, make sure you can login with: `ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/linuxProj`
 
-# But also the default key
-ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem
+## Add port to 2200 in the sshd_config file (keep both of the ports up and test them before deleting 22). Open the configuration file with: `sudo nano /etc/ssh/sshd_config`
 
-# Add port to 2200 in the sshd_config file
-* Keep both of the ports up and test them before deleting 22
-sudo nano /etc/ssh/sshd_config
-
-# Add a Custom rule to the lightsail web app that allows for port 220, it doesn't neccesarily say SSH
+## On the Lightsail interface allow create a `CUSTOM` rule for allowing port `2200`. (Note: it doesn't say SSH necessarily)
 
 # Since ssh configuration file is modified, we need to run the following command to restart the service:
 sudo service ssh restart
