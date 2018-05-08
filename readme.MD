@@ -146,103 +146,15 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 3. Enable virtual host: `sudo a2ensite FlaskApp`
 
 
-
-
-
-
-
-
-This file tells Apache how to respond to requests, where to find the files for a particular site and much more. You can read up on everything this file can do within the Apache documentation.
-
-For now, add the following line at the end of the <VirtualHost *:80> block, right before the closing </VirtualHost> line: WSGIScriptAlias / /var/www/html/myapp.wsgi
-
-Finally, restart Apache with the 
-
-You might get a warning saying "Could not reliably determine the server's fully qualified domain name". If you do, don't worry about it. Check out this AskUbuntu thread for a discussion of the cause of this message.
-
-# Installing a PostgreSQL database server
-(Didn't I use an sqlite database for the backend project????)
-sudo apt-get install postgresql
-
-
-
-
-
-
-
 # Notes from the class are copied below:
-
-
-# Create a new user
-sudo adduser
-
-# The example videos say port 2222, but I'm on a different port at least that is what I have found out thanks to the instructions videos
-
-# Here is the way to log on as a stuent
-# That is, this is has you log in as a new student
-ssh student@127.0.0.1 -p 2200
-
-
-# On your local machine run ssh-keygen to create a new public and private key pair
-
-# Then we have to move this to the server.
-
-# In the users home directory, make a new folder called .ssh and then inside the folder create a file called authorized keys. In that file, copy the contents of the public key on one line.
-
-# These are some security measures that must be placed
-chmod 700 .ssh
-chmod 644 .ssh/authorized_keys
-
-# Remember here are the following commands to see exactly what is going on:
-r = 4 read
-w = 2 write
-x = 1 execute
-
-# To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system.
-
-# To do this, run the following command to open the following file:
-sudo nano /etc/ssh/sshd_config
-
-# Change the line that says PasswordAuthentication from "yes" to "no"
-* In the case of lightsail, this was the default configuration so I didn't actually have to follow this step.
+# Additional notes taken from class
+## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
 
 
 
 
 
 
-# So here is how I can log on via public-private key
-
-Before for some reason it was working on prt 2200
-
-ssh student@127.0.0.1 -p 2200 -i /Users/maxcarey/.ssh/linuxCourse
-
-Afterwards, it was working on port 2222
-
-
-
-
-# How does linux manage file permissions
-
-Means its a files   ownder     group    everyone  
-- 					rw- 	   r-- 	    r--
-
-The are the file permissions
-
-r = 4 read
-w = 2 write
-x = 1 execute
-
-So 5 would be read and execute. Because of 4 + 1
-
-
-## Firewalls
-
-See status of firewall (uwf is the preinstalled firewall for ubuntu)
-
-sudo ufw status
-
-## It's a good idea to block all ports coming-in and then only enable the ones that you need
 
 
 
