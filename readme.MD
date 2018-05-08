@@ -1,5 +1,11 @@
 # Linux Server Configuration Project
 
+## Update the available package list
+`sudo apt-get update`
+
+## Upgrade those packages from the previous list
+`sudo apt-get upgrade`
+
 ## I.P Address and port to acsess server via SSH
 grader@52.65.31.177 -p 2200
 
@@ -13,114 +19,88 @@ grader@52.65.31.177 -p 2200
 that I had saved on my local machine.
 (See post: https://discussions.udacity.com/t/warning-unprotected-private-key-file/369966) `sudo chmod 600 /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
 
-## Log-in on default port 22 using the default key `ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
+## Log-in on default port 22 using the default key
+`ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/LightsailDefaultPrivateKey-ap-southeast-2.pem`
 
-## Use ssh key-gen to create a new public private key and upload it to the server. Once done, make sure you can login with: `ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/linuxProj`
+## Use ssh key-gen to create a new public private key and upload it to the server. Once done, make sure you can login with:
+`ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/linuxProj`
 
-## Add port to 2200 in the sshd_config file (keep both of the ports up and test them before deleting 22). Open the configuration file with: `sudo nano /etc/ssh/sshd_config`
+## Add port to 2200 in the sshd_config file (keep both of the ports up and test them before deleting 22). Open the configuration file with:
+`sudo nano /etc/ssh/sshd_config`
 
-## On the Lightsail interface allow create a `CUSTOM` rule for allowing port `2200`. (Note: it doesn't say SSH necessarily)
+## On the Lightsail interface allow create a `CUSTOM`rule for allowing port `2200`. (Note: it doesn't say SSH necessarily)
 
-# Since ssh configuration file is modified, we need to run the following command to restart the service:
-sudo service ssh restart
+## Since ssh configuration file is modified, we need to run the following command to restart the service:
+`sudo service ssh restart`
 
-# Now I can log in on port 2200 with my own key
-ssh ubuntu@52.65.31.177 -p 22 -i /Users/maxcarey/.ssh/linuxProj
+## Make sure you can log in via both ports
+`ssh ubuntu@52.65.31.177 -p 22 -i pathToFile`
+`ssh ubuntu@52.65.31.177 -p 2200 -i pathToFile`
 
-# Configure uncomplicated firewall
+## Delete port 22 in configuration file
 
-# Establish default rule for incoming connections
-sudo ufw default deny incoming
+## Configure uncomplicated firewall
+1. Establish default rule for incoming connections `sudo ufw default deny incoming`
+2. Establish a default rule for outgoing requests `sudo ufw default allow outgoing`
+3. Open port 2200 (Since SSH is going to be on port 2200, which is not the default we must run `sudo ufw allow 2200`. On the contrary, `sudo ufw allow ssh` would automatically open port 22.
+4. Open NTP and HTTP ports 
+`sudo ufw allow ntp` (port 80)
+`sudo ufw allow htp` (123)
+5. Enabnle Firewall
+`sudo ufw enable`
 
-# Establish a default rule for outgoing requests
-sudo ufw default allow outgoing
+## Create a new user called grader
+`sudo adduser grader`
+Give them a password of "grader" and leave all the other settings blank
 
-# We will need shh
-* Since ssh is going to be on port 2200, which is not the default run:
-sudo ufw allow 2200
+## Add this new user to the sudo list
+`sudo usermod -aG sudo grader`
 
-* These commands are the default ports respectivelly
-sudo ufw allow ntp
-sudo ufw allow htp
+## Switch into the new user to and list the contents of the root directory to make sure they have the right permissions
+`su - grader`
+`sudo ls -al /`
+(Question: when running `su - ubuntu` to switch back, it looks like I never stored a password for the Ubuntu user)
 
-# Enabnle Firewall
-sudo ufw enable
+## On local machine generate a key-pair (always do this on local machine so that private key is ALWAYS private)
+`ssh-keygen`
+Don't give the key a password
 
-* Now when leaving the system, I can only log on with -port 2200
-* It looks like the other option is timing out
+## On the server, in the location /home/grader
+`sudo nano .ssh/authorized_keys Paste in the puublic key in one line in the file authorized_keys`
 
-# Clean up: remove port 2200 from the sshd_configuration file
-sudo nano /etc/ssh/sshd_config
-sudo service ssh restart
+## Change some of the permissions on these newly created keys
+`sudo chmod700 .ssh`
+`sudo chmod644 authorized_keys`
 
-# Update the available package list
-* In general, I should run these commands first:
-sudo apt-get update
+## Reference for octal permissions
+r = 4 (read)
+w = 2 (write)
+x = 1 (execute)
 
-# Upgrade those packages from the previous list
-sudo apt-get upgrade
+## Set owner and group of each of these files to grader
+`sudo chown grader .ssh`
+`sudo chgrp grader .ssh`
+`sudo chown grader .ssh/authorized_keys`
+`sudo chgrp grader .ssh/authorized_keys`
 
-# Create a new user called grader
-# Give them a password of "grader"
-# Leave all the other settings blank
-sudo adduser grader
-
-# Add this new user to the sudo list
-sudo usermod -aG sudo grader
-
-# Switch into the new user to and list the contents of the root directory to make sure they have the right permissions
-su - grader
-sudo ls -al /
-* It looks like I can't log back into my ubuntu account which is weird
-
-# On local machine generate a key-pair
-# It should be done on local machine so that private key is ALWAYS private.
-ssh-keygen
-
-# On the server
-# In the location /home/grader
-sudo nano .ssh/authorized_keys
-
-# Paste in the puublic key in one line in the file authorized_keys
-
-# Change some of the permissions on these newly created keys
-sudo chmod700 .ssh
-sudo chmod644 authorized_keys
-
-# Remember here are the following commands to see exactly what is going on:
-r = 4 read
-w = 2 write
-x = 1 execute
-
-# Also make sure that the owner and group of each of these files is grader
-sudo chown grader .ssh
-sudo chgrp grader .ssh
-
-sudo chown grader .ssh/authorized_keys
-sudo chgrp grader .ssh/authorized_keys
-
-# Change to Universal Coordinate Time
-# Follow the instructions here:
+## Change to Universal Coordinate Time
+### Follow the instructions here:
 https://askubuntu.com/questions/138423/how-do-i-change-my-timezone-to-utc-gmt?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+(Already done)
 
-# Install the Apache HTTP Server
-sudo apt-get install apache2
+## Install the Apache HTTP Server
+`sudo apt-get install apache2`
 
-# The location of the default index.html file which is served 
-/var/www/html/index.html
+## Use the I.P address at the top of this file to see if the default apache server index.html `/var/www/html/index.html`
 
-*At this point: I am sucsesfully able to see the apache HTML file
+##Install Apache 2 application handler (for Python 3 in my case)
+Python 3: `sudo apt-get install libapache2-mod-wsgi-py3`
+Python 2: `sudo apt-get install libapache2-mod-wsgi`
 
-# Install Apache 2 application handler for python 3
-* Don't run: sudo apt-get install libapache2-mod-wsgi
-* Run the following since it's python3
-
-sudo apt-get install libapache2-mod-wsgi-py3
-
-# Restart Apache
+## Restart Apache
 sudo service apache2 restart
 
-# Install postgresql
+## Install postgresql
 sudo apt-get install postgresql
 
 # Check that no remote connections are allowed:
