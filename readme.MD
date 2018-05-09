@@ -194,6 +194,11 @@ application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
 
 ## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
 
+## To disable remote acsess from root user follow this guide: https://websiteforstudents.com/how-to-disable-remote-logon-for-root-on-ubuntu-16-04-lts-servers/
+`sudo nano /etc/ssh/sshd_config`
+Change line from `sudo nano /etc/ssh/sshd_config` to `PermitRootLogin no`
+Restart ssh `sudo systemctl reload sshd.service`
+
 ## Delete the database (for debugging purposes):
 See: https://discussions.udacity.com/t/deploying-flask-appication-in-ubuntu/247292/16:
 
