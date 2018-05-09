@@ -192,7 +192,7 @@ application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
 
 # Notes from the class are copied below:
 # Additional notes taken from class
-## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
+To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
 
 ## Delete a database:
 See: https://discussions.udacity.com/t/deploying-flask-appication-in-ubuntu/247292/16:
