@@ -194,15 +194,18 @@ application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
 # Additional notes taken from class
 ## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
 
-
 ## Delete a database:
 See: https://discussions.udacity.com/t/deploying-flask-appication-in-ubuntu/247292/16:
+
+## Stop the apache2 server (https://discussions.udacity.com/t/importerror-no-module-named-flaskapp/304285/16)
+`sudo service apache2 stop`
 
 ## Probably the easiest way to drop an database, regardless of who owns it is to use the PostgreSQL admin user, postgres. So to delete a database, you could run the following from the Linux command prompt:
 
 `sudo -u postgres dropdb catalog`
 
-Then follow same steps as before to create a new one
+## Then follow same steps above to create a new one
 
-## Stop the apache2 server (https://discussions.udacity.com/t/importerror-no-module-named-flaskapp/304285/16)
-`sudo service apache2 stop`
+## Make sure to reload the apache server, simply starting it back up again will not bring the new changes into effect.
+
+`sudo service apache 2 reload`
