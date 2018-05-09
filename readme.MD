@@ -107,7 +107,7 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 (Either way we can see by default that the file does not allow any remote connections so no changes are necessary)
 `sudo nano /etc/postgresql/9.5/main/pg_hba.conf`
 
-## Follow kongling893 to set up catalog database, configure apache to handle requests to custom handler and to create the wsgi file (https://github.com/kongling893/Linux-Server-Configuration-UDACITY). Many custom steps had to be taken especially when configuring the "catalog app" (see below)
+## I used git hub user kongling893 repositroy as a guide to help me work through the following steps: setting up the database catalog, configuring apache to handle requests to custom handler, creating a wsgi file (https://github.com/kongling893/Linux-Server-Configuration-UDACITY). Many custom steps had to be taken especially when configuring the "catalog app" (see below)
 
 ## Switch user to posgres
 `sudo su - postgres`
