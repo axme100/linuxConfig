@@ -1,6 +1,6 @@
 # Linux Server Configuration Project
 
-## I.P Address and port to acsess server via SSH
+## I.P Address and port to access server via SSH
 grader@52.65.31.177 -p 2200
 
 ## URL to hosted web application
@@ -65,7 +65,7 @@ Give them a password of "grader" and leave all the other settings blank
 Don't give the key a password
 
 ## On the server, in the location /home/grader
-`sudo nano .ssh/authorized_keys Paste in the puublic key in one line in the file authorized_keys`
+`sudo nano .ssh/authorized_keys Paste in the public key in one line in the file authorized_keys`
 
 ## Change some of the permissions on these newly created keys
 `sudo chmod700 .ssh`
@@ -124,10 +124,10 @@ Follow instructions here: https://discussions.udacity.com/t/disallowing-remote-c
 ## Give that user a password
 `ALTER ROLE catalog WITH PASSWORD 'cataloghorsechair';`
 
-## Grant all privelages to that user
+## Grant all privileges to that user
 `GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;`
 
-## Configure apache to hand off requests to the applcation handler. (This can be done in the file `/etc/apache2/sites-enabled/000-default.conf`.
+## Configure apache to hand off requests to the application handler. (This can be done in the file `/etc/apache2/sites-enabled/000-default.conf`.
 1. `sudo nano /etc/apache2/sites-available/FlaskApp.conf`
 2. Add the following code to the virtual host:
 `<VirtualHost *:80>
@@ -190,11 +190,11 @@ application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
 ## Reload apache2 server
 `sudo service apache2 reload`
 
-# Notes from the class are copied below:
-# Additional notes taken from class
-To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
+# Additional notes/references
 
-## Delete a database:
+## To disable password based authentication, so that users or forced to log-in via public-private key, I need to disable to password configuration, log in-system. To do this, run the following command to open the following file `sudo nano /etc/ssh/sshd_config` Change the line that says PasswordAuthentication from `yes` to `no`
+
+## Delete the database (for debugging purposes):
 See: https://discussions.udacity.com/t/deploying-flask-appication-in-ubuntu/247292/16:
 
 ## Stop the apache2 server (https://discussions.udacity.com/t/importerror-no-module-named-flaskapp/304285/16)
