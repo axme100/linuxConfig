@@ -198,26 +198,11 @@ application.secret_key = 'PUT IN SECRET KEY FOUND AT BOTTOM OF __init__.py file'
 ## Delete a database:
 See: https://discussions.udacity.com/t/deploying-flask-appication-in-ubuntu/247292/16:
 
-Probably the easiest way to drop an database, regardless of who owns it is to use the PostgreSQL admin user, postgres. So to delete a database, you could run the following from the Linux command prompt:
+## Probably the easiest way to drop an database, regardless of who owns it is to use the PostgreSQL admin user, postgres. So to delete a database, you could run the following from the Linux command prompt:
 
-`sudo -u postgres dropdb itemcatalog`
+`sudo -u postgres dropdb catalog`
 
-Then you can create a fresh empty one with the command:
+Then follow same steps as before to create a new one
 
-sudo -u postgres createdb -O catalog itemcatalog
-
-Check out the manual pages or help for these commands to learn more about them.
-
-Then just run your database populator script again.
-
-P.S. The reason your modified LotsOfItems.py script did not work was because the SQLAlchemy engine was set to the old SQLite database file.
-
-AND
-
-https://discussions.udacity.com/t/importerror-no-module-named-flaskapp/304285/16
-
-OK, so that would indicate that the tables (or something else) are owned by catalog1 user.
-
-So you can't drop the database as your app still has 2 active connections to it. The easiest thing to do is to stop Apache and then you will be able to drop the database.
-
-Then create the database again (making sure it is owned by the catalog user), then run your database setup file. This will then create the tables in the database. Make sure the user specified in that file is the catalog user, so the tables are owned by that user.
+## Stop the apache2 server (https://discussions.udacity.com/t/importerror-no-module-named-flaskapp/304285/16)
+`sudo service apache2 stop`
